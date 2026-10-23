@@ -1,7 +1,6 @@
 # Changelog
 
-## 1.0.0 - 2026-10-23
-
+## 1.0.0 - 2026-10-23 - First standalone release
 - First standalone release, synchronized with getmcpads gateway revision `3e1c2c8`.
 - Five native read tools: `adjust_list_apps`, `adjust_list_events`, `adjust_get_catalog`, `adjust_run_report` and `adjust_compare_periods`, plus the `adjust://guide` resource.
 - Read-only by design. There is no write tool and no write setting.

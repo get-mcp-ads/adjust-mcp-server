@@ -28,3 +28,5 @@ Releases are driven by version tags. The `release.yml` workflow publishes npm fi
 Every step skips cleanly when its target already holds the version, so a partial release can be completed by rerunning the workflow from the Actions tab with the existing tag.
 
 Publishing a GitHub source release does not claim npm or MCP Registry availability. The README distinguishes source installation from package installation.
+
+Before tagging, add the release to CHANGELOG.md as `## X.Y.Z - YYYY-MM-DD - Title`, then run `npm run release-history`. The README shows every release from the changelog, and the test suite fails when it falls behind.

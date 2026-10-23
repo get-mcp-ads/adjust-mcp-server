@@ -27,14 +27,23 @@ Run locally with your own Adjust API token and a client that supports stdio MCP,
 
 ## What's new
 
+<!-- release-history:start -->
 **[v1.0.0: First standalone release](https://github.com/get-mcp-ads/adjust-mcp-server/releases/tag/v1.0.0) · October 23, 2026**
 
-- Port the five native Adjust reads and the reporting guide from the hosted gateway.
-- Require an explicit app token allowlist, checked before every request and applied to app discovery.
-- Send requests only to the documented Report Service host, with refused redirects, timeouts, bounded responses and token redaction.
-- Require a Node.js release with the October 2026 security fixes and check Node 22, 24 and 26 in CI.
+- First standalone release, synchronized with getmcpads gateway revision `3e1c2c8`.
+- Five native read tools: `adjust_list_apps`, `adjust_list_events`, `adjust_get_catalog`, `adjust_run_report` and `adjust_compare_periods`, plus the `adjust://guide` resource.
+- Read-only by design. There is no write tool and no write setting.
+- Require `ADJUST_API_TOKEN` and an explicit `ADJUST_APP_TOKENS` allowlist, validated at startup. `ADJUST_ENVIRONMENT` fixes production or sandbox data for every report.
+- Send requests only to `automate.adjust.com`, refuse redirects, apply a 25 second timeout and a 20 MB response limit, and redact the API token from provider text.
+- Keep native totals, treat HTTP 200 error bodies as failures and mark truncated, warned or paginated reports partial.
+- Report configured app tokens that Adjust did not return, in `unavailableAppTokens`.
+- Require Node.js 22.23.4, 24.22.1, 26.12.1 or a newer release of those lines, warn on stderr otherwise, and check Node 22, 24 and 26 in CI.
+- Publish from version tags through `release.yml`: npm with provenance, the GitHub release, then the MCP Registry.
 
-[Full changelog](CHANGELOG.md) · [Source synchronization details](SOURCE_SYNC.md) · [All releases](https://github.com/get-mcp-ads/adjust-mcp-server/releases)
+[Full changelog](CHANGELOG.md) · [All releases](https://github.com/get-mcp-ads/adjust-mcp-server/releases)
+<!-- release-history:end -->
+
+Source synchronization: [SOURCE_SYNC.md](SOURCE_SYNC.md).
 
 ### Upgrade notes
 
