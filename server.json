@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.getmcpads/adjust",
+  "title": "Adjust",
+  "description": "Adjust MCP server: 5 read tools, 0 write tools. Read-only reporting for allowlisted apps.",
+  "version": "1.0.0",
+  "websiteUrl": "https://www.getmcpads.com/tools/adjust",
+  "repository": {
+    "url": "https://github.com/get-mcp-ads/adjust-mcp-server",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@getmcpads/adjust-mcp-server",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "ADJUST_API_TOKEN",
+          "description": "Adjust API token from your account settings. Keep it secret.",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "ADJUST_APP_TOKENS",
+          "description": "Comma-separated Adjust app tokens this server may read. Required.",
+          "isRequired": true,
+          "isSecret": false
+        },
+        {
+          "name": "ADJUST_ENVIRONMENT",
+          "description": "production (default) or sandbox. Fixed for every report.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

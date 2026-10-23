@@ -1,0 +1,854 @@
+{
+  "serverInfo": {
+    "name": "@getmcpads/adjust-mcp-server",
+    "title": "Adjust MCP server: 5 read tools, 0 write tools. Read-only reporting for allowlisted apps.",
+    "version": "1.0.0",
+    "websiteUrl": "https://www.getmcpads.com/tools/adjust",
+    "icons": [
+      {
+        "src": "https://mcp.getmcpads.com/icon.svg",
+        "mimeType": "image/svg+xml"
+      }
+    ]
+  },
+  "tools": [
+    {
+      "name": "adjust_list_apps",
+      "title": "adjust list apps",
+      "description": "List the Adjust applications in ADJUST_APP_TOKENS that this API token can read, with native currency and configured operating systems. Applications outside the allowlist are never returned.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Original tool result: parsed JSON when the text is JSON, otherwise the text or multiple MCP content blocks. Provider fields depend on the selected query."
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "adjust_list_events",
+      "title": "adjust list events",
+      "description": "Discover native event base slugs, ordinary activity-count metric IDs and app-specific event tokens for one allowlisted Adjust app. Use activityMetric for counts; the event base slug alone is not a report metric. Keep SKAdNetwork and aggregate revenue definitions separate.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "appToken": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "description": "Exact Adjust application token from ADJUST_APP_TOKENS. Applications are separate from advertising accounts."
+          },
+          "search": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Filter native event definitions by a short search term."
+          }
+        },
+        "required": [
+          "appToken"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Original tool result: parsed JSON when the text is JSON, otherwise the text or multiple MCP content blocks. Provider fields depend on the selected query."
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "adjust_get_catalog",
+      "title": "adjust get catalog",
+      "description": "Read documented standard Adjust dimensions and example metrics, plus event metrics scoped to one allowlisted application. Metrics and spend/revenue access remain subject to Adjust permissions; the standard metric list is not exhaustive.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "appToken": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "description": "Exact Adjust application token from ADJUST_APP_TOKENS. Applications are separate from advertising accounts."
+          }
+        },
+        "required": [
+          "appToken"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Original tool result: parsed JSON when the text is JSON, otherwise the text or multiple MCP content blocks. Provider fields depend on the selected query."
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "adjust_run_report",
+      "title": "adjust run report",
+      "description": "Read an attribution/performance report for one allowlisted Adjust app. Preserves native totals, warnings, attribution options, currency and UTC offset. Missing metrics are null; ratios are native fractions. A truncated or partial result is not a complete extraction.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "appToken": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "description": "Exact Adjust application token from ADJUST_APP_TOKENS. Applications are separate from advertising accounts."
+          },
+          "startDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "First date of the reporting period, in YYYY-MM-DD format."
+          },
+          "endDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "Last date of the reporting period, in YYYY-MM-DD format, on or after startDate."
+          },
+          "dimensions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "hour",
+                "day",
+                "week",
+                "month",
+                "year",
+                "quarter",
+                "app",
+                "app_token",
+                "network",
+                "partner",
+                "partner_name",
+                "partner_id",
+                "channel",
+                "platform",
+                "os_name",
+                "device_type",
+                "country",
+                "country_code",
+                "region",
+                "ad_account_id",
+                "store_id",
+                "store_type",
+                "currency",
+                "currency_code",
+                "campaign",
+                "campaign_network",
+                "campaign_id_network",
+                "adgroup",
+                "adgroup_network",
+                "adgroup_id_network",
+                "creative",
+                "creative_network",
+                "creative_id_network",
+                "source_network",
+                "source_id_network"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 12,
+            "default": [
+              "os_name",
+              "day",
+              "network",
+              "campaign_id_network",
+              "campaign_network"
+            ],
+            "description": "Native reporting dimensions. Validate compatibility with the selected metrics."
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
+              "maxLength": 120
+            },
+            "minItems": 1,
+            "maxItems": 30,
+            "default": [
+              "installs",
+              "clicks",
+              "impressions"
+            ],
+            "description": "Native or documented calculated metric names to request. Check compatibility with the selected dimensions."
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$",
+            "description": "Explicit ISO currency for money metrics. Keep the same currency across comparisons."
+          },
+          "utcOffset": {
+            "type": "string",
+            "default": "+00:00",
+            "description": "Fixed UTC offset; +00:00 by default. Split local-date comparisons if the offset changes during the period."
+          },
+          "attributionSource": {
+            "type": "string",
+            "enum": [
+              "first",
+              "dynamic"
+            ],
+            "default": "dynamic",
+            "description": "Assign activity to the first install source or the native dynamic reattribution source."
+          },
+          "attributionTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "click",
+                "impression",
+                "engaged_ad"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 3,
+            "description": "Optional engagement filter. Omit for an unfiltered report including native organic data. Empty types in output means no engagement filter."
+          },
+          "reattributed": {
+            "type": "string",
+            "enum": [
+              "all",
+              "true",
+              "false"
+            ],
+            "default": "all",
+            "description": "Include all users, reattributed users only, or users without reattribution."
+          },
+          "adSpendMode": {
+            "type": "string",
+            "enum": [
+              "adjust",
+              "network",
+              "mixed"
+            ],
+            "default": "network",
+            "description": "Native source of ad spend. Keep the same mode across comparisons and avoid counting overlapping spend twice."
+          },
+          "cohortMaturity": {
+            "type": "string",
+            "enum": [
+              "mature",
+              "immature"
+            ],
+            "default": "immature",
+            "description": "Include current cohort values or use mature-only mode, which may zero immature cohorts."
+          },
+          "osNames": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "android",
+                "bada",
+                "blackberry",
+                "ios",
+                "linux",
+                "macos",
+                "server",
+                "symbian",
+                "unknown",
+                "webos",
+                "windows",
+                "windows-phone"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 12,
+            "description": "Operating system filter, for example ios or android. Keep os_name in dimensions to compare platforms."
+          },
+          "iapRevenueMode": {
+            "type": "string",
+            "enum": [
+              "GROSS_100",
+              "GROSS_85",
+              "GROSS_70",
+              "GROSS_60"
+            ],
+            "default": "GROSS_100",
+            "description": "In-app revenue percentage. Retain the same setting across comparisons."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
+                  "maxLength": 120,
+                  "description": "A documented dimension, or a metric requested in this report. app_token cannot be filtered."
+                },
+                "operator": {
+                  "type": "string",
+                  "enum": [
+                    "in",
+                    "not_in",
+                    "contains",
+                    "exclude",
+                    "lt",
+                    "lte",
+                    "gt",
+                    "gte",
+                    "eq",
+                    "ne"
+                  ],
+                  "description": "Dimensions accept in, not_in, contains, exclude, eq and ne. Metrics accept eq, ne, lt, lte, gt and gte."
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "minItems": 1,
+                      "maxItems": 100
+                    }
+                  ],
+                  "description": "One value, or a list for in and not_in. Values must not contain commas."
+                }
+              },
+              "required": [
+                "field",
+                "operator",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            "maxItems": 20,
+            "description": "Filters combined according to this tool's query schema. Use provider field names and the declared operators."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000,
+            "default": 1000,
+            "description": "Display row limit only; truncation is explicit and native totals are preserved."
+          }
+        },
+        "required": [
+          "appToken",
+          "startDate",
+          "endDate"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Original tool result: parsed JSON when the text is JSON, otherwise the text or multiple MCP content blocks. Provider fields depend on the selected query."
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    },
+    {
+      "name": "adjust_compare_periods",
+      "title": "adjust compare periods",
+      "description": "Compare two equal-length periods for one allowlisted Adjust application with identical metrics, filters, OS and measurement settings. Defaults to the immediately preceding period. Changes use native totals, never sums of breakdowns. Unavailable or partial values have no calculated change; cohort maturity and reporting delays still apply.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "appToken": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$",
+            "description": "Exact Adjust application token from ADJUST_APP_TOKENS. Applications are separate from advertising accounts."
+          },
+          "startDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "First date of the reporting period, in YYYY-MM-DD format."
+          },
+          "endDate": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "Last date of the reporting period, in YYYY-MM-DD format, on or after startDate."
+          },
+          "dimensions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "hour",
+                "day",
+                "week",
+                "month",
+                "year",
+                "quarter",
+                "app",
+                "app_token",
+                "network",
+                "partner",
+                "partner_name",
+                "partner_id",
+                "channel",
+                "platform",
+                "os_name",
+                "device_type",
+                "country",
+                "country_code",
+                "region",
+                "ad_account_id",
+                "store_id",
+                "store_type",
+                "currency",
+                "currency_code",
+                "campaign",
+                "campaign_network",
+                "campaign_id_network",
+                "adgroup",
+                "adgroup_network",
+                "adgroup_id_network",
+                "creative",
+                "creative_network",
+                "creative_id_network",
+                "source_network",
+                "source_id_network"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 12,
+            "default": [
+              "os_name",
+              "day",
+              "network",
+              "campaign_id_network",
+              "campaign_network"
+            ],
+            "description": "Native reporting dimensions. Validate compatibility with the selected metrics."
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
+              "maxLength": 120
+            },
+            "minItems": 1,
+            "maxItems": 30,
+            "default": [
+              "installs",
+              "clicks",
+              "impressions"
+            ],
+            "description": "Native or documented calculated metric names to request. Check compatibility with the selected dimensions."
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$",
+            "description": "Explicit ISO currency for money metrics. Keep the same currency across comparisons."
+          },
+          "utcOffset": {
+            "type": "string",
+            "default": "+00:00",
+            "description": "Fixed UTC offset; +00:00 by default. Split local-date comparisons if the offset changes during the period."
+          },
+          "attributionSource": {
+            "type": "string",
+            "enum": [
+              "first",
+              "dynamic"
+            ],
+            "default": "dynamic",
+            "description": "Assign activity to the first install source or the native dynamic reattribution source."
+          },
+          "attributionTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "click",
+                "impression",
+                "engaged_ad"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 3,
+            "description": "Optional engagement filter. Omit for an unfiltered report including native organic data. Empty types in output means no engagement filter."
+          },
+          "reattributed": {
+            "type": "string",
+            "enum": [
+              "all",
+              "true",
+              "false"
+            ],
+            "default": "all",
+            "description": "Include all users, reattributed users only, or users without reattribution."
+          },
+          "adSpendMode": {
+            "type": "string",
+            "enum": [
+              "adjust",
+              "network",
+              "mixed"
+            ],
+            "default": "network",
+            "description": "Native source of ad spend. Keep the same mode across comparisons and avoid counting overlapping spend twice."
+          },
+          "cohortMaturity": {
+            "type": "string",
+            "enum": [
+              "mature",
+              "immature"
+            ],
+            "default": "immature",
+            "description": "Include current cohort values or use mature-only mode, which may zero immature cohorts."
+          },
+          "osNames": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "android",
+                "bada",
+                "blackberry",
+                "ios",
+                "linux",
+                "macos",
+                "server",
+                "symbian",
+                "unknown",
+                "webos",
+                "windows",
+                "windows-phone"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 12,
+            "description": "Operating system filter, for example ios or android. Keep os_name in dimensions to compare platforms."
+          },
+          "iapRevenueMode": {
+            "type": "string",
+            "enum": [
+              "GROSS_100",
+              "GROSS_85",
+              "GROSS_70",
+              "GROSS_60"
+            ],
+            "default": "GROSS_100",
+            "description": "In-app revenue percentage. Retain the same setting across comparisons."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
+                  "maxLength": 120,
+                  "description": "A documented dimension, or a metric requested in this report. app_token cannot be filtered."
+                },
+                "operator": {
+                  "type": "string",
+                  "enum": [
+                    "in",
+                    "not_in",
+                    "contains",
+                    "exclude",
+                    "lt",
+                    "lte",
+                    "gt",
+                    "gte",
+                    "eq",
+                    "ne"
+                  ],
+                  "description": "Dimensions accept in, not_in, contains, exclude, eq and ne. Metrics accept eq, ne, lt, lte, gt and gte."
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "minItems": 1,
+                      "maxItems": 100
+                    }
+                  ],
+                  "description": "One value, or a list for in and not_in. Values must not contain commas."
+                }
+              },
+              "required": [
+                "field",
+                "operator",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            "maxItems": 20,
+            "description": "Filters combined according to this tool's query schema. Use provider field names and the declared operators."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000,
+            "default": 1000,
+            "description": "Display row limit only; truncation is explicit and native totals are preserved."
+          },
+          "comparison": {
+            "type": "object",
+            "properties": {
+              "startDate": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "description": "First date of the comparison period, in YYYY-MM-DD format."
+              },
+              "endDate": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "description": "Last date of the comparison period, in YYYY-MM-DD format."
+              }
+            },
+            "required": [
+              "startDate",
+              "endDate"
+            ],
+            "additionalProperties": false,
+            "description": "Optional equal-length comparison period; otherwise use the immediately preceding period."
+          }
+        },
+        "required": [
+          "appToken",
+          "startDate",
+          "endDate"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Original tool result: parsed JSON when the text is JSON, otherwise the text or multiple MCP content blocks. Provider fields depend on the selected query."
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      }
+    }
+  ],
+  "resources": [
+    {
+      "name": "adjust-guide",
+      "uri": "adjust://guide",
+      "description": "How to read Adjust reports with this server: tool order, scope, measurement settings and rate limits.",
+      "mimeType": "text/plain"
+    }
+  ],
+  "prompts": []
+}
