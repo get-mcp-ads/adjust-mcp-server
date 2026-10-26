@@ -28,19 +28,19 @@ const filter = z.object({
 
 export const ADJUST_REPORT_SHAPE = {
   appToken, startDate: date(), endDate: date(),
-  dimensions: z.array(z.enum(ADJUST_DIMENSIONS)).min(1).max(12).default(["os_name", "day", "network", "campaign_id_network", "campaign_network"]),
-  metrics: z.array(slug()).min(1).max(30).default(["installs", "clicks", "impressions"]),
+  dimensions: z.array(z.enum(ADJUST_DIMENSIONS)).min(1).max(12).prefault(["os_name", "day", "network", "campaign_id_network", "campaign_network"]),
+  metrics: z.array(slug()).min(1).max(30).prefault(["installs", "clicks", "impressions"]),
   currency: z.string().regex(/^[A-Z]{3}$/).optional().describe("Explicit ISO currency for money metrics. Keep the same currency across comparisons."),
-  utcOffset: z.string().default("+00:00").describe("Fixed UTC offset; +00:00 by default. Split local-date comparisons if the offset changes during the period."),
-  attributionSource: z.enum(["first", "dynamic"]).default("dynamic").describe("Assign activity to the first install source or the native dynamic reattribution source."),
+  utcOffset: z.string().prefault("+00:00").describe("Fixed UTC offset; +00:00 by default. Split local-date comparisons if the offset changes during the period."),
+  attributionSource: z.enum(["first", "dynamic"]).prefault("dynamic").describe("Assign activity to the first install source or the native dynamic reattribution source."),
   attributionTypes: z.array(z.enum(["click", "impression", "engaged_ad"])).min(1).max(3).optional().describe("Optional engagement filter. Omit for an unfiltered report including native organic data. Empty types in output means no engagement filter."),
-  reattributed: z.enum(["all", "true", "false"]).default("all").describe("Include all users, reattributed users only, or users without reattribution."),
-  adSpendMode: z.enum(["adjust", "network", "mixed"]).default("network").describe("Native source of ad spend. Keep the same mode across comparisons and avoid counting overlapping spend twice."),
-  cohortMaturity: z.enum(["mature", "immature"]).default("immature").describe("Include current cohort values or use mature-only mode, which may zero immature cohorts."),
+  reattributed: z.enum(["all", "true", "false"]).prefault("all").describe("Include all users, reattributed users only, or users without reattribution."),
+  adSpendMode: z.enum(["adjust", "network", "mixed"]).prefault("network").describe("Native source of ad spend. Keep the same mode across comparisons and avoid counting overlapping spend twice."),
+  cohortMaturity: z.enum(["mature", "immature"]).prefault("immature").describe("Include current cohort values or use mature-only mode, which may zero immature cohorts."),
   osNames: z.array(z.enum(ADJUST_OS_NAMES)).min(1).max(ADJUST_OS_NAMES.length).optional().describe("Operating system filter, for example ios or android. Keep os_name in dimensions to compare platforms."),
-  iapRevenueMode: z.enum(["GROSS_100", "GROSS_85", "GROSS_70", "GROSS_60"]).default("GROSS_100").describe("In-app revenue percentage. Retain the same setting across comparisons."),
+  iapRevenueMode: z.enum(["GROSS_100", "GROSS_85", "GROSS_70", "GROSS_60"]).prefault("GROSS_100").describe("In-app revenue percentage. Retain the same setting across comparisons."),
   filters: z.array(filter).max(20).optional(),
-  limit: z.number().int().min(1).max(10000).default(1000).describe("Display row limit only; truncation is explicit and native totals are preserved."),
+  limit: z.number().int().min(1).max(10000).prefault(1000).describe("Display row limit only; truncation is explicit and native totals are preserved."),
 };
 
 const ok = (data: unknown): ToolResult => ({ content: [{ type: "text", text: JSON.stringify(data) }] });

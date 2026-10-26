@@ -28,17 +28,18 @@ Run locally with your own Adjust API token and a client that supports stdio MCP,
 ## What's new
 
 <!-- release-history:start -->
-**[v1.0.0: First standalone release](https://github.com/get-mcp-ads/adjust-mcp-server/releases/tag/v1.0.0) · October 23, 2026**
+**[v1.0.1: Zod 4 security update](https://github.com/get-mcp-ads/adjust-mcp-server/releases/tag/v1.0.1) · October 26, 2026**
 
-- First standalone release, synchronized with getmcpads gateway revision `3e1c2c8`.
-- Five native read tools: `adjust_list_apps`, `adjust_list_events`, `adjust_get_catalog`, `adjust_run_report` and `adjust_compare_periods`, plus the `adjust://guide` resource.
-- Read-only by design. There is no write tool and no write setting.
-- Require `ADJUST_API_TOKEN` and an explicit `ADJUST_APP_TOKENS` allowlist, validated at startup. `ADJUST_ENVIRONMENT` fixes production or sandbox data for every report.
-- Send requests only to `automate.adjust.com`, refuse redirects, apply a 25 second timeout and a 20 MB response limit, and redact the API token from provider text.
-- Keep native totals, treat HTTP 200 error bodies as failures and mark truncated, warned or paginated reports partial.
-- Report configured app tokens that Adjust did not return, in `unavailableAppTokens`.
-- Require Node.js 22.23.4, 24.22.1, 26.12.1 or a newer release of those lines, warn on stderr otherwise, and check Node 22, 24 and 26 in CI.
-- Publish from version tags through `release.yml`: npm with provenance, the GitHub release, then the MCP Registry.
+- Update `zod` to 4.6.7. Every Zod release before 4.6.6 is covered by the high-severity advisory GHSA-mrhx-c7xc-m3w5: validating an oversized constrained collection can exhaust memory, and no Zod 3 release carries the fix. `npm audit --omit=dev` reports no vulnerability again.
+- Keep the Zod 3 validation behaviour. A parameter default is still validated and completed before use, so an omitted object must still supply its required fields.
+- Keep each parameter's own description when the parameter is optional or has a default. Zod 4 stores a description on the wrapped schema only, so the shared fallback description could otherwise replace it.
+- Tool names, parameters and descriptions published over MCP are unchanged. `server-card.json` is regenerated with Zod 4's JSON Schema output, which spells some constraints differently.
+
+**Earlier releases**
+
+| Version | Date | Highlights |
+| --- | --- | --- |
+| 1.0.0 | October 23, 2026 | First standalone release |
 
 [Full changelog](CHANGELOG.md) · [All releases](https://github.com/get-mcp-ads/adjust-mcp-server/releases)
 <!-- release-history:end -->
@@ -54,7 +55,7 @@ This is the first release. It requires Node.js 22.23.4, 24.22.1, 26.12.1 or a ne
 This is a GitHub source release. npm and MCP Registry versions are published separately. The commands below select this exact version; unpinned `npx` examples later in this document select the version currently available on npm.
 
 ```bash
-git clone --branch v1.0.0 --depth 1 https://github.com/get-mcp-ads/adjust-mcp-server.git
+git clone --branch v1.0.1 --depth 1 https://github.com/get-mcp-ads/adjust-mcp-server.git
 cd adjust-mcp-server
 npm ci
 npm run build

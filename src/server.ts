@@ -8,7 +8,7 @@ import { validateConfig, type AdjustConfig } from "./config.js";
 import { installToolQuality } from "./tool-quality.js";
 import { registerAdjustReads } from "./platforms/adjust/tools.js";
 
-export const PACKAGE_VERSION = "1.0.0";
+export const PACKAGE_VERSION = "1.0.1";
 
 /** Read-only by design: there is no write tool and no setting that registers one. */
 export function createServer(input: AdjustConfig): McpServer {

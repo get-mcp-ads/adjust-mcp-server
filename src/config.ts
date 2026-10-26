@@ -16,10 +16,10 @@ const schema = z.object({
   allowedAppTokens: z.array(z.string().regex(APP_TOKEN_PATTERN, "Each ADJUST_APP_TOKENS entry must be an Adjust app token of letters, digits, _ or -."))
     .min(1, "Set ADJUST_APP_TOKENS to a comma-separated list of the Adjust app tokens this server may read.")
     .max(MAX_APP_TOKENS, `ADJUST_APP_TOKENS accepts at most ${MAX_APP_TOKENS} app tokens.`),
-  environment: z.enum(["production", "sandbox"], { errorMap: () => ({ message: "ADJUST_ENVIRONMENT must be production or sandbox." }) }).default("production"),
+  environment: z.enum(["production", "sandbox"], { error: "ADJUST_ENVIRONMENT must be production or sandbox." }).prefault("production"),
 }).superRefine((value, context) => {
   if (value.allowedAppTokens.includes(value.apiToken)) {
-    context.addIssue({ code: z.ZodIssueCode.custom, message: "ADJUST_APP_TOKENS must list app tokens, not the API token." });
+    context.addIssue({ code: "custom", message: "ADJUST_APP_TOKENS must list app tokens, not the API token." });
   }
 });
 
