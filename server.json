@@ -3,7 +3,7 @@
   "name": "com.getmcpads/adjust",
   "title": "Adjust",
   "description": "Adjust MCP server: 5 read tools, 0 write tools. Read-only reporting for allowlisted apps.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://www.getmcpads.com/tools/adjust",
   "repository": {
     "url": "https://github.com/get-mcp-ads/adjust-mcp-server",
@@ -14,7 +14,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@getmcpads/adjust-mcp-server",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "transport": {
         "type": "stdio"
       },

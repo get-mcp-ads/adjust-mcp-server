@@ -2,7 +2,7 @@
   "serverInfo": {
     "name": "@getmcpads/adjust-mcp-server",
     "title": "Adjust MCP server: 5 read tools, 0 write tools. Read-only reporting for allowlisted apps.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "websiteUrl": "https://www.getmcpads.com/tools/adjust",
     "icons": [
       {
@@ -19,8 +19,8 @@
       "inputSchema": {
         "type": "object",
         "properties": {},
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "outputSchema": {
         "type": "object",
@@ -30,7 +30,7 @@
               {
                 "type": "object",
                 "properties": {},
-                "additionalProperties": true
+                "additionalProperties": {}
               },
               {
                 "type": "array",
@@ -55,8 +55,8 @@
         "required": [
           "result"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "annotations": {
         "readOnlyHint": true,
@@ -81,17 +81,17 @@
             "description": "Exact Adjust application token from ADJUST_APP_TOKENS. Applications are separate from advertising accounts."
           },
           "search": {
+            "description": "Filter native event definitions by a short search term.",
             "type": "string",
             "minLength": 1,
-            "maxLength": 120,
-            "description": "Filter native event definitions by a short search term."
+            "maxLength": 120
           }
         },
         "required": [
           "appToken"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "outputSchema": {
         "type": "object",
@@ -101,7 +101,7 @@
               {
                 "type": "object",
                 "properties": {},
-                "additionalProperties": true
+                "additionalProperties": {}
               },
               {
                 "type": "array",
@@ -126,8 +126,8 @@
         "required": [
           "result"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "annotations": {
         "readOnlyHint": true,
@@ -155,8 +155,8 @@
         "required": [
           "appToken"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "outputSchema": {
         "type": "object",
@@ -166,7 +166,7 @@
               {
                 "type": "object",
                 "properties": {},
-                "additionalProperties": true
+                "additionalProperties": {}
               },
               {
                 "type": "array",
@@ -191,8 +191,8 @@
         "required": [
           "result"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "annotations": {
         "readOnlyHint": true,
@@ -227,6 +227,16 @@
             "description": "Last date of the reporting period, in YYYY-MM-DD format, on or after startDate."
           },
           "dimensions": {
+            "description": "Native reporting dimensions. Validate compatibility with the selected metrics.",
+            "default": [
+              "os_name",
+              "day",
+              "network",
+              "campaign_id_network",
+              "campaign_network"
+            ],
+            "minItems": 1,
+            "maxItems": 12,
             "type": "array",
             "items": {
               "type": "string",
@@ -267,54 +277,47 @@
                 "source_network",
                 "source_id_network"
               ]
-            },
-            "minItems": 1,
-            "maxItems": 12,
-            "default": [
-              "os_name",
-              "day",
-              "network",
-              "campaign_id_network",
-              "campaign_network"
-            ],
-            "description": "Native reporting dimensions. Validate compatibility with the selected metrics."
+            }
           },
           "metrics": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
-              "maxLength": 120
-            },
-            "minItems": 1,
-            "maxItems": 30,
+            "description": "Native or documented calculated metric names to request. Check compatibility with the selected dimensions.",
             "default": [
               "installs",
               "clicks",
               "impressions"
             ],
-            "description": "Native or documented calculated metric names to request. Check compatibility with the selected dimensions."
+            "minItems": 1,
+            "maxItems": 30,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$"
+            }
           },
           "currency": {
+            "description": "Explicit ISO currency for money metrics. Keep the same currency across comparisons.",
             "type": "string",
-            "pattern": "^[A-Z]{3}$",
-            "description": "Explicit ISO currency for money metrics. Keep the same currency across comparisons."
+            "pattern": "^[A-Z]{3}$"
           },
           "utcOffset": {
-            "type": "string",
+            "description": "Fixed UTC offset; +00:00 by default. Split local-date comparisons if the offset changes during the period.",
             "default": "+00:00",
-            "description": "Fixed UTC offset; +00:00 by default. Split local-date comparisons if the offset changes during the period."
+            "type": "string"
           },
           "attributionSource": {
+            "description": "Assign activity to the first install source or the native dynamic reattribution source.",
+            "default": "dynamic",
             "type": "string",
             "enum": [
               "first",
               "dynamic"
-            ],
-            "default": "dynamic",
-            "description": "Assign activity to the first install source or the native dynamic reattribution source."
+            ]
           },
           "attributionTypes": {
+            "description": "Optional engagement filter. Omit for an unfiltered report including native organic data. Empty types in output means no engagement filter.",
+            "minItems": 1,
+            "maxItems": 3,
             "type": "array",
             "items": {
               "type": "string",
@@ -323,41 +326,41 @@
                 "impression",
                 "engaged_ad"
               ]
-            },
-            "minItems": 1,
-            "maxItems": 3,
-            "description": "Optional engagement filter. Omit for an unfiltered report including native organic data. Empty types in output means no engagement filter."
+            }
           },
           "reattributed": {
+            "description": "Include all users, reattributed users only, or users without reattribution.",
+            "default": "all",
             "type": "string",
             "enum": [
               "all",
               "true",
               "false"
-            ],
-            "default": "all",
-            "description": "Include all users, reattributed users only, or users without reattribution."
+            ]
           },
           "adSpendMode": {
+            "description": "Native source of ad spend. Keep the same mode across comparisons and avoid counting overlapping spend twice.",
+            "default": "network",
             "type": "string",
             "enum": [
               "adjust",
               "network",
               "mixed"
-            ],
-            "default": "network",
-            "description": "Native source of ad spend. Keep the same mode across comparisons and avoid counting overlapping spend twice."
+            ]
           },
           "cohortMaturity": {
+            "description": "Include current cohort values or use mature-only mode, which may zero immature cohorts.",
+            "default": "immature",
             "type": "string",
             "enum": [
               "mature",
               "immature"
-            ],
-            "default": "immature",
-            "description": "Include current cohort values or use mature-only mode, which may zero immature cohorts."
+            ]
           },
           "osNames": {
+            "description": "Operating system filter, for example ios or android. Keep os_name in dimensions to compare platforms.",
+            "minItems": 1,
+            "maxItems": 12,
             "type": "array",
             "items": {
               "type": "string",
@@ -375,31 +378,30 @@
                 "windows",
                 "windows-phone"
               ]
-            },
-            "minItems": 1,
-            "maxItems": 12,
-            "description": "Operating system filter, for example ios or android. Keep os_name in dimensions to compare platforms."
+            }
           },
           "iapRevenueMode": {
+            "description": "In-app revenue percentage. Retain the same setting across comparisons.",
+            "default": "GROSS_100",
             "type": "string",
             "enum": [
               "GROSS_100",
               "GROSS_85",
               "GROSS_70",
               "GROSS_60"
-            ],
-            "default": "GROSS_100",
-            "description": "In-app revenue percentage. Retain the same setting across comparisons."
+            ]
           },
           "filters": {
+            "description": "Filters combined according to this tool's query schema. Use provider field names and the declared operators.",
+            "maxItems": 20,
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "field": {
                   "type": "string",
-                  "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
                   "maxLength": 120,
+                  "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
                   "description": "A documented dimension, or a metric requested in this report. app_token cannot be filtered."
                 },
                 "operator": {
@@ -428,13 +430,13 @@
                       "type": "number"
                     },
                     {
+                      "minItems": 1,
+                      "maxItems": 100,
                       "type": "array",
                       "items": {
                         "type": "string",
                         "maxLength": 500
-                      },
-                      "minItems": 1,
-                      "maxItems": 100
+                      }
                     }
                   ],
                   "description": "One value, or a list for in and not_in. Values must not contain commas."
@@ -446,16 +448,14 @@
                 "value"
               ],
               "additionalProperties": false
-            },
-            "maxItems": 20,
-            "description": "Filters combined according to this tool's query schema. Use provider field names and the declared operators."
+            }
           },
           "limit": {
+            "description": "Display row limit only; truncation is explicit and native totals are preserved.",
+            "default": 1000,
             "type": "integer",
             "minimum": 1,
-            "maximum": 10000,
-            "default": 1000,
-            "description": "Display row limit only; truncation is explicit and native totals are preserved."
+            "maximum": 10000
           }
         },
         "required": [
@@ -463,8 +463,8 @@
           "startDate",
           "endDate"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "outputSchema": {
         "type": "object",
@@ -474,7 +474,7 @@
               {
                 "type": "object",
                 "properties": {},
-                "additionalProperties": true
+                "additionalProperties": {}
               },
               {
                 "type": "array",
@@ -499,8 +499,8 @@
         "required": [
           "result"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "annotations": {
         "readOnlyHint": true,
@@ -535,6 +535,16 @@
             "description": "Last date of the reporting period, in YYYY-MM-DD format, on or after startDate."
           },
           "dimensions": {
+            "description": "Native reporting dimensions. Validate compatibility with the selected metrics.",
+            "default": [
+              "os_name",
+              "day",
+              "network",
+              "campaign_id_network",
+              "campaign_network"
+            ],
+            "minItems": 1,
+            "maxItems": 12,
             "type": "array",
             "items": {
               "type": "string",
@@ -575,54 +585,47 @@
                 "source_network",
                 "source_id_network"
               ]
-            },
-            "minItems": 1,
-            "maxItems": 12,
-            "default": [
-              "os_name",
-              "day",
-              "network",
-              "campaign_id_network",
-              "campaign_network"
-            ],
-            "description": "Native reporting dimensions. Validate compatibility with the selected metrics."
+            }
           },
           "metrics": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
-              "maxLength": 120
-            },
-            "minItems": 1,
-            "maxItems": 30,
+            "description": "Native or documented calculated metric names to request. Check compatibility with the selected dimensions.",
             "default": [
               "installs",
               "clicks",
               "impressions"
             ],
-            "description": "Native or documented calculated metric names to request. Check compatibility with the selected dimensions."
+            "minItems": 1,
+            "maxItems": 30,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$"
+            }
           },
           "currency": {
+            "description": "Explicit ISO currency for money metrics. Keep the same currency across comparisons.",
             "type": "string",
-            "pattern": "^[A-Z]{3}$",
-            "description": "Explicit ISO currency for money metrics. Keep the same currency across comparisons."
+            "pattern": "^[A-Z]{3}$"
           },
           "utcOffset": {
-            "type": "string",
+            "description": "Fixed UTC offset; +00:00 by default. Split local-date comparisons if the offset changes during the period.",
             "default": "+00:00",
-            "description": "Fixed UTC offset; +00:00 by default. Split local-date comparisons if the offset changes during the period."
+            "type": "string"
           },
           "attributionSource": {
+            "description": "Assign activity to the first install source or the native dynamic reattribution source.",
+            "default": "dynamic",
             "type": "string",
             "enum": [
               "first",
               "dynamic"
-            ],
-            "default": "dynamic",
-            "description": "Assign activity to the first install source or the native dynamic reattribution source."
+            ]
           },
           "attributionTypes": {
+            "description": "Optional engagement filter. Omit for an unfiltered report including native organic data. Empty types in output means no engagement filter.",
+            "minItems": 1,
+            "maxItems": 3,
             "type": "array",
             "items": {
               "type": "string",
@@ -631,41 +634,41 @@
                 "impression",
                 "engaged_ad"
               ]
-            },
-            "minItems": 1,
-            "maxItems": 3,
-            "description": "Optional engagement filter. Omit for an unfiltered report including native organic data. Empty types in output means no engagement filter."
+            }
           },
           "reattributed": {
+            "description": "Include all users, reattributed users only, or users without reattribution.",
+            "default": "all",
             "type": "string",
             "enum": [
               "all",
               "true",
               "false"
-            ],
-            "default": "all",
-            "description": "Include all users, reattributed users only, or users without reattribution."
+            ]
           },
           "adSpendMode": {
+            "description": "Native source of ad spend. Keep the same mode across comparisons and avoid counting overlapping spend twice.",
+            "default": "network",
             "type": "string",
             "enum": [
               "adjust",
               "network",
               "mixed"
-            ],
-            "default": "network",
-            "description": "Native source of ad spend. Keep the same mode across comparisons and avoid counting overlapping spend twice."
+            ]
           },
           "cohortMaturity": {
+            "description": "Include current cohort values or use mature-only mode, which may zero immature cohorts.",
+            "default": "immature",
             "type": "string",
             "enum": [
               "mature",
               "immature"
-            ],
-            "default": "immature",
-            "description": "Include current cohort values or use mature-only mode, which may zero immature cohorts."
+            ]
           },
           "osNames": {
+            "description": "Operating system filter, for example ios or android. Keep os_name in dimensions to compare platforms.",
+            "minItems": 1,
+            "maxItems": 12,
             "type": "array",
             "items": {
               "type": "string",
@@ -683,31 +686,30 @@
                 "windows",
                 "windows-phone"
               ]
-            },
-            "minItems": 1,
-            "maxItems": 12,
-            "description": "Operating system filter, for example ios or android. Keep os_name in dimensions to compare platforms."
+            }
           },
           "iapRevenueMode": {
+            "description": "In-app revenue percentage. Retain the same setting across comparisons.",
+            "default": "GROSS_100",
             "type": "string",
             "enum": [
               "GROSS_100",
               "GROSS_85",
               "GROSS_70",
               "GROSS_60"
-            ],
-            "default": "GROSS_100",
-            "description": "In-app revenue percentage. Retain the same setting across comparisons."
+            ]
           },
           "filters": {
+            "description": "Filters combined according to this tool's query schema. Use provider field names and the declared operators.",
+            "maxItems": 20,
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "field": {
                   "type": "string",
-                  "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
                   "maxLength": 120,
+                  "pattern": "^[A-Za-z][A-Za-z0-9_ ]*$",
                   "description": "A documented dimension, or a metric requested in this report. app_token cannot be filtered."
                 },
                 "operator": {
@@ -736,13 +738,13 @@
                       "type": "number"
                     },
                     {
+                      "minItems": 1,
+                      "maxItems": 100,
                       "type": "array",
                       "items": {
                         "type": "string",
                         "maxLength": 500
-                      },
-                      "minItems": 1,
-                      "maxItems": 100
+                      }
                     }
                   ],
                   "description": "One value, or a list for in and not_in. Values must not contain commas."
@@ -754,18 +756,17 @@
                 "value"
               ],
               "additionalProperties": false
-            },
-            "maxItems": 20,
-            "description": "Filters combined according to this tool's query schema. Use provider field names and the declared operators."
+            }
           },
           "limit": {
+            "description": "Display row limit only; truncation is explicit and native totals are preserved.",
+            "default": 1000,
             "type": "integer",
             "minimum": 1,
-            "maximum": 10000,
-            "default": 1000,
-            "description": "Display row limit only; truncation is explicit and native totals are preserved."
+            "maximum": 10000
           },
           "comparison": {
+            "description": "Optional equal-length comparison period; otherwise use the immediately preceding period.",
             "type": "object",
             "properties": {
               "startDate": {
@@ -783,8 +784,7 @@
               "startDate",
               "endDate"
             ],
-            "additionalProperties": false,
-            "description": "Optional equal-length comparison period; otherwise use the immediately preceding period."
+            "additionalProperties": false
           }
         },
         "required": [
@@ -792,8 +792,8 @@
           "startDate",
           "endDate"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "outputSchema": {
         "type": "object",
@@ -803,7 +803,7 @@
               {
                 "type": "object",
                 "properties": {},
-                "additionalProperties": true
+                "additionalProperties": {}
               },
               {
                 "type": "array",
@@ -828,8 +828,8 @@
         "required": [
           "result"
         ],
-        "additionalProperties": false,
-        "$schema": "http://json-schema.org/draft-07/schema#"
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "additionalProperties": false
       },
       "annotations": {
         "readOnlyHint": true,
