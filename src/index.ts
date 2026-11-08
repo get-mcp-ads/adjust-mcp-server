@@ -1,0 +1,9 @@
+/**
+ * adjust-mcp-server: an open-source MCP server for the Adjust Report Service API.
+ * Copyright 2026 GetMCPAds. https://www.getmcpads.com
+ * SPDX-License-Identifier: Apache-2.0
+ */
+export { createServer, PACKAGE_VERSION } from "./server.js";
+export { loadConfig, validateConfig } from "./config.js";
+export type { AdjustConfig } from "./config.js";
+export { nodeRuntimeWarning } from "./runtime-check.js";
